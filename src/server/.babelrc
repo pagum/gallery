@@ -1,0 +1,6 @@
+{
+  "presets": ["es2015",["@babel/preset-env", {
+    "targets": {"node": 4}
+  }],"@babel/preset-typescript" ],
+  "plugins": ["@babel/plugin-transform-runtime"]
+}
