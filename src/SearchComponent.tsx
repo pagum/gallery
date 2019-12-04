@@ -1,11 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  TextField,
-  InputAdornment,
-  Button,
-  IconButton,
-  Checkbox
-} from "@material-ui/core";
+import React from "react";
+import { TextField } from "@material-ui/core";
 import Search from "@material-ui/icons/Search";
 
 import {
@@ -14,19 +8,21 @@ import {
   SearchContainer,
   StyledButton
 } from "./component.style";
-import { StoreContextProvider } from "./StoreContext";
+import { SearchComponentProps } from "./data.types";
 
-export const SearchComponent = ({ getSearchTerm }: any) => {
+const buttons = ["image", "gif"];
+
+export const SearchComponent = ({
+  getSearchTerm,
+  getFilterOption
+}: SearchComponentProps) => {
   const [searchTerm, setSearchTerm] = React.useState("");
 
-  // const handleChangeCheckbox = (name: string) => (
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   setState({ ...state, [name]: event.target.checked });
-  // };
   const handleChangeSearchTerm = (event: React.ChangeEvent<HTMLInputElement>) =>
     setSearchTerm(event.target.value);
+
   const onEvent = () => getSearchTerm(searchTerm);
+
   const isSearchTermValid = searchTerm && searchTerm.length >= 3;
   const shortSearchTermMessage = "Search term is too short";
   return (
@@ -46,7 +42,6 @@ export const SearchComponent = ({ getSearchTerm }: any) => {
               searchTerm && !isSearchTermValid && shortSearchTermMessage
             }
           />
-
           <StyledIconButton
             onClick={onEvent}
             aria-label="search"
@@ -56,9 +51,11 @@ export const SearchComponent = ({ getSearchTerm }: any) => {
           </StyledIconButton>
         </Wrapper>
         <Wrapper>
-          <StyledButton>image</StyledButton>
-
-          <StyledButton>Gif</StyledButton>
+          {buttons.map(button => (
+            <StyledButton key={button} onClick={() => getFilterOption(button)}>
+              {button}
+            </StyledButton>
+          ))}
         </Wrapper>
       </SearchContainer>
     </>

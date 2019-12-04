@@ -1,7 +1,13 @@
-import express, { Response, Request, Express } from "express";
+import express, { Response, Request } from "express";
 import fetch from "node-fetch";
 import qs from "qs";
 import cors from "cors";
+
+import {
+  PrepareParamsInterface,
+  GiphyResInterface,
+  PixabyResInterface
+} from "./data.types";
 
 const options: cors.CorsOptions = {
   allowedHeaders: [
@@ -30,10 +36,7 @@ const app = express();
 
 app.use(cors(options));
 app.options("*", cors(options));
-interface PrepareParamsInterface {
-  searchTerm: string;
-  isPixaby: boolean;
-}
+
 const prepareParams = ({ searchTerm, isPixaby }: PrepareParamsInterface) => {
   const params = isPixaby
     ? {
@@ -56,7 +59,6 @@ app.get("/search", async (request: Request, response: Response) => {
   const searchTerm = request.query.searchTerm;
 
   const pixabyParams = prepareParams({ searchTerm, isPixaby: true });
-
   const giphyParams = prepareParams({ searchTerm, isPixaby: false });
 
   const pixabyApiUrl = PIXABAY_URL + pixabyParams;
@@ -78,7 +80,7 @@ app.get("/search", async (request: Request, response: Response) => {
     });
 
   const giphy = giphyResponse.data.map(
-    ({ id, title, source, images: { downsized } }: any) => ({
+    ({ id, title, source, images: { downsized } }: GiphyResInterface) => ({
       id,
       pageURL: source,
       contentUrl: downsized.url,
@@ -86,7 +88,6 @@ app.get("/search", async (request: Request, response: Response) => {
       type: "gif"
     })
   );
-
   const pixabyResponse = await fetch(pixabyApiUrl)
     .then(res => {
       return res.json();
@@ -95,7 +96,7 @@ app.get("/search", async (request: Request, response: Response) => {
       response.status(400).send({ ...res });
     });
   const pixaby = pixabyResponse.hits.map(
-    ({ pageURL, webformatURL, id, tags }: any) => ({
+    ({ pageURL, webformatURL, id, tags }: PixabyResInterface) => ({
       id,
       pageURL,
       contentUrl: webformatURL,
@@ -105,9 +106,7 @@ app.get("/search", async (request: Request, response: Response) => {
   );
   const images = pixaby.concat(giphy);
 
-  console.log("zaraz zwroce!!!");
   response.status(200).send({ data: { images, count: images.length } });
-  //TODO:error handling
 });
 
 app.listen(PORT, function() {
