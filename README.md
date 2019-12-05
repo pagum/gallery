@@ -12,6 +12,7 @@ Open http://localhost:1234 to view it in the browser.
 ## Available Scripts for Back-End part
 
 ```bash
+cd server
 npm run server
 ```
 Open http://localhost:4000 to view it in the browser.
