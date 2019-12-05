@@ -30,7 +30,7 @@ const GIPHY_API_KEY = "NqC2EAHFi0GvsTrIb6923eStEmERwvps";
 
 const englishLang = "en";
 //number of items from api
-const limit = 3;
+const limit = 6;
 
 const app = express();
 

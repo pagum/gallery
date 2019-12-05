@@ -75,5 +75,3 @@ export const GalleryMessage = styled.div`
   font-weight: 600;
   text-align: center;
 `;
-
-export const ImagesWrapper = styled.div``;

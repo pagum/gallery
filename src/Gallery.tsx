@@ -3,8 +3,7 @@ import { Image, GalleryProps } from "./data.types";
 import {
   StyledImage,
   GalleryContainer,
-  GalleryMessage,
-  ImagesWrapper
+  GalleryMessage
 } from "./component.style";
 
 export const Gallery = ({ searchTerm, filter }: GalleryProps) => {
@@ -38,17 +37,18 @@ export const Gallery = ({ searchTerm, filter }: GalleryProps) => {
             <GalleryMessage>
               Search results for <strong>{searchTerm}</strong>
             </GalleryMessage>
-            <ImagesWrapper>
+            <div>
               {content.map(({ id, contentUrl, pageURL, description }) => (
-                <StyledImage
-                  key={id}
-                  src={contentUrl}
-                  alt={description}
-                  title={description}
-                  onClick={() => (window.location.href = pageURL)}
-                ></StyledImage>
+                <a href={pageURL} key={id} target="_blank">
+                  <StyledImage
+                    key={id}
+                    src={contentUrl}
+                    alt={description}
+                    title={description}
+                  ></StyledImage>
+                </a>
               ))}
-            </ImagesWrapper>
+            </div>
           </>
         ) : (
           <GalleryMessage>
